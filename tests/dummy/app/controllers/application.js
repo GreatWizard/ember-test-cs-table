@@ -3,10 +3,10 @@ import Controller from '@ember/controller'
 export default class ApplicationController extends Controller {
   model = {
     structure: [
-      { label: 'Name', key: 'name' },
-      { label: 'Device', key: 'device' },
-      { label: 'Path', key: 'path' },
-      { label: 'Status', key: 'status' },
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
     ],
     rows: [
       {
@@ -40,5 +40,8 @@ export default class ApplicationController extends Controller {
         status: 'scheduled',
       },
     ],
+    selectableFunction(items) {
+      return items.filter((item) => item.status === 'available')
+    },
   }
 }

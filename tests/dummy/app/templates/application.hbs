@@ -2,6 +2,10 @@
 
 <h2 id='title'>Welcome to the Developer Test</h2>
 
-<CsTable @rows={{this.model.rows}} @structure={{this.model.structure}} />
+<CsTable
+  @rows={{this.model.rows}}
+  @structure={{this.model.structure}}
+  @selectableFunction={{this.model.selectableFunction}}
+/>
 
 {{outlet}}

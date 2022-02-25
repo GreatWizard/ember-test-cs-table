@@ -1,6 +1,6 @@
 import { module, test } from 'qunit'
 import { setupRenderingTest } from 'ember-qunit'
-import { render } from '@ember/test-helpers'
+import { click, render } from '@ember/test-helpers'
 import { hbs } from 'ember-cli-htmlbars'
 
 module('Integration | Component | cs-table', function (hooks) {
@@ -103,5 +103,211 @@ module('Integration | Component | cs-table', function (hooks) {
     assert
       .dom('[data-test-cs-table-empty]')
       .doesNotExist('Empty message is not displayed')
+  })
+
+  test('it selects all items when click on the select-all checkbox', async function (assert) {
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} />`
+    )
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert.dom('[data-test-select-all]').hasText('None selected')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .doesNotExist('No row is selected')
+    await click('[data-test-select-all-checkbox]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isChecked('Select all checkbox is checked')
+    assert.dom('[data-test-select-all]').hasText('Selected 2')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .exists({ count: 2 }, 'All rows are selected')
+    await click('[data-test-select-all-checkbox]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert.dom('[data-test-select-all]').hasText('None selected')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .doesNotExist('No row is selected')
+  })
+
+  test('it selects row one by one', async function (assert) {
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} />`
+    )
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .hasProperty(
+        'indeterminate',
+        false,
+        'Select all checkbox is not indeterminated'
+      )
+    assert.dom('[data-test-select-all]').hasText('None selected')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .doesNotExist('No row is selected')
+    await click('[data-test-cs-table-row-select="selectable"]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .hasProperty(
+        'indeterminate',
+        true,
+        'Select all checkbox is indeterminated'
+      )
+    assert.dom('[data-test-select-all]').hasText('Selected 1')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .exists({ count: 1 }, 'One row is selected')
+    await click('[data-test-cs-table-row-select="selectable"]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isChecked('Select all checkbox is checked')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .hasProperty(
+        'indeterminate',
+        false,
+        'Select all checkbox is not indeterminated'
+      )
+    assert.dom('[data-test-select-all]').hasText('Selected 2')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .exists({ count: 2 }, 'All rows are selected')
+    await click('[data-test-cs-table-row-select="selected"]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .hasProperty(
+        'indeterminate',
+        true,
+        'Select all checkbox is indeterminated'
+      )
+    assert.dom('[data-test-select-all]').hasText('Selected 1')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .exists({ count: 1 }, 'One row is selected')
+    await click('[data-test-cs-table-row-select="selected"]')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isNotChecked('Select all checkbox is not checked')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .hasProperty(
+        'indeterminate',
+        false,
+        'Select all checkbox is not indeterminated'
+      )
+    assert.dom('[data-test-select-all]').hasText('None selected')
+    assert
+      .dom('[data-test-cs-table-row-select="selected"]')
+      .doesNotExist('No row is selected')
+  })
+
+  test("it disallows to select rows that doesn't validate the selectableFunction passed as argument", async function (assert) {
+    assert.expect(4)
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} />`
+    )
+    assert
+      .dom('[data-test-cs-table-row-select="selectable"]')
+      .exists({ count: 2 }, 'All rows are selectable')
+
+    this.set('selectableFunction', (items) => {
+      return items.filter((item) => item.status === 'available')
+    })
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} @selectableFunction={{this.selectableFunction}} />`
+    )
+    assert
+      .dom('[data-test-cs-table-row-select="selectable"]')
+      .exists({ count: 1 }, 'One row is selectable')
+
+    this.set('selectableFunction', () => false)
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} @selectableFunction={{this.selectableFunction}} />`
+    )
+    assert
+      .dom('[data-test-cs-table-row-select="selectable"]')
+      .doesNotExist('No row is selectable')
+
+    try {
+      this.set('selectableFunction', true)
+      await render(
+        hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} @selectableFunction={{this.selectableFunction}} />`
+      )
+    } catch (error) {
+      assert.ok(error, 'Error is thrown')
+    }
   })
 })

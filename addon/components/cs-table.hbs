@@ -1,3 +1,24 @@
+<div data-test-select-all>
+  <Input
+    @type='checkbox'
+    @checked={{eq this.selectedItems.length this.selectableItems.length}}
+    indeterminate={{and
+      (lt this.selectedItems.length this.selectableItems.length)
+      (gt this.selectedItems.length 0)
+    }}
+    disabled={{eq this.selectableItems.length 0}}
+    label='Select all'
+    aria-label='Select all'
+    {{on 'input' this.selectAll}}
+    data-test-select-all-checkbox
+  />
+  {{if
+    this.selectedItems
+    (concat 'Selected ' this.selectedItems.length)
+    'None selected'
+  }}
+</div>
+
 <table data-test-cs-table>
   {{#if @structure}}
     <thead data-test-cs-table-header>
@@ -6,7 +27,13 @@
   {{/if}}
   <tbody data-test-cs-table-body={{@rows.length}}>
     {{#each @rows as |row|}}
-      <CsTable::Row @row={{row}} @structure={{@structure}} />
+      <CsTable::Row
+        @row={{row}}
+        @structure={{@structure}}
+        @selected={{includes row this.selectedItems}}
+        @disabled={{not (includes row this.selectableItems)}}
+        @onSelect={{this.rowSelectedChange}}
+      />
     {{else}}
       <p data-test-cs-table-empty>No data to display.</p>
     {{/each}}
