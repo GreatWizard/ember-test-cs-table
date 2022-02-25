@@ -23,10 +23,10 @@ module('Integration | Component | cs-table', function (hooks) {
 
   test('it renders with structure without rows', async function (assert) {
     this.set('structure', [
-      { label: 'Name', key: 'name' },
-      { label: 'Device', key: 'device' },
-      { label: 'Path', key: 'path' },
-      { label: 'Status', key: 'status' },
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
     ])
     await render(hbs`<CsTable @structure={{this.structure}} />`)
     assert.dom('[data-test-cs-table]').exists('Table is displayed')
@@ -35,16 +35,16 @@ module('Integration | Component | cs-table', function (hooks) {
       .exists('Table header is displayed')
     assert
       .dom('[data-test-cs-table-header-col="name"]')
-      .exists('Name column is displayed correctly')
+      .exists('Name column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="device"]')
-      .exists('Device column is displayed correctly')
+      .exists('Device column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="path"]')
-      .exists('Path column is displayed correctly')
+      .exists('Path column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="status"]')
-      .exists('Status column is displayed correctly')
+      .exists('Status column is displayed')
     assert
       .dom('[data-test-cs-table-body]')
       .doesNotExist('Table body is not displayed')
@@ -56,10 +56,10 @@ module('Integration | Component | cs-table', function (hooks) {
 
   test('it renders with structure and rows', async function (assert) {
     this.set('structure', [
-      { label: 'Name', key: 'name' },
-      { label: 'Device', key: 'device' },
-      { label: 'Path', key: 'path' },
-      { label: 'Status', key: 'status' },
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
     ])
     this.set('rows', [
       {
@@ -84,22 +84,22 @@ module('Integration | Component | cs-table', function (hooks) {
       .exists('Table header is displayed')
     assert
       .dom('[data-test-cs-table-header-col="name"]')
-      .exists('Name column is displayed correctly')
+      .exists('Name column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="device"]')
-      .exists('Device column is displayed correctly')
+      .exists('Device column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="path"]')
-      .exists('Path column is displayed correctly')
+      .exists('Path column is displayed')
     assert
       .dom('[data-test-cs-table-header-col="status"]')
-      .exists('Status column is displayed correctly')
+      .exists('Status column is displayed')
     assert
       .dom('[data-test-cs-table-body="2"]')
       .exists('Table body is displayed')
     assert
       .dom('[data-test-cs-table-row]')
-      .exists({ count: 2 }, 'Rows are displayed correctly')
+      .exists({ count: 2 }, 'Rows are displayed')
     assert
       .dom('[data-test-cs-table-empty]')
       .doesNotExist('Empty message is not displayed')

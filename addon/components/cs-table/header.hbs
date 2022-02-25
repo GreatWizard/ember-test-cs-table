@@ -1,0 +1,7 @@
+{{#if @structure}}
+  <tr>
+    {{#each @structure as |s|}}
+      <th data-test-cs-table-header-col={{s.key}}>{{s.label}}</th>
+    {{/each}}
+  </tr>
+{{/if}}

@@ -1,11 +1,7 @@
 <table data-test-cs-table>
   {{#if @structure}}
     <thead data-test-cs-table-header>
-      <tr>
-        {{#each @structure as |s|}}
-          <th data-test-cs-table-header-col={{s.key}}>{{s.label}}</th>
-        {{/each}}
-      </tr>
+      <CsTable::Header @structure={{@structure}} />
     </thead>
   {{/if}}
   <tbody data-test-cs-table-body={{@rows.length}}>
