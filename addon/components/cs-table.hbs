@@ -1,15 +1,16 @@
 <table data-test-cs-table>
-  <thead data-test-cs-table-header>
-    <tr>
-      <th>Name</th>
-      <th>Device</th>
-      <th>Path</th>
-      <th>Status</th>
-    </tr>
-  </thead>
+  {{#if @structure}}
+    <thead data-test-cs-table-header>
+      <tr>
+        {{#each @structure as |s|}}
+          <th data-test-cs-table-header-col={{s.key}}>{{s.label}}</th>
+        {{/each}}
+      </tr>
+    </thead>
+  {{/if}}
   <tbody data-test-cs-table-body={{@rows.length}}>
     {{#each @rows as |row|}}
-      <CsTable::Row @row={{row}} />
+      <CsTable::Row @row={{row}} @structure={{@structure}} />
     {{else}}
       <p data-test-cs-table-empty>No data to display.</p>
     {{/each}}

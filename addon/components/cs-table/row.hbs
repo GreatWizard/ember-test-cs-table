@@ -1,8 +1,15 @@
 {{#if @row}}
-  <tr data-test-cs-table-row='{{@row.name}}-{{@row.device}}'>
-    <td>{{@row.name}}</td>
-    <td>{{@row.device}}</td>
-    <td>{{@row.path}}</td>
-    <td>{{@row.status}}</td>
+  <tr data-test-cs-table-row>
+    {{#if @structure}}
+      {{#each @structure as |s|}}
+        <td data-test-cs-table-row-col={{s.key}}>{{get @row s.key}}</td>
+      {{/each}}
+    {{else}}
+      {{#with (keys @row) as |keys|}}
+        {{#each keys as |key|}}
+          <td data-test-cs-table-row-col={{key}}>{{get @row key}}</td>
+        {{/each}}
+      {{/with}}
+    {{/if}}
   </tr>
 {{/if}}
