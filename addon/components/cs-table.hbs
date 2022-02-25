@@ -9,12 +9,7 @@
   </thead>
   <tbody data-test-cs-table-body={{@rows.length}}>
     {{#each @rows as |row|}}
-      <tr data-test-cs-table-row='{{row.name}}-{{row.device}}'>
-        <td>{{row.name}}</td>
-        <td>{{row.device}}</td>
-        <td>{{row.path}}</td>
-        <td>{{row.status}}</td>
-      </tr>
+      <CsTable::Row @row={{row}} />
     {{else}}
       <p data-test-cs-table-empty>No data to display.</p>
     {{/each}}
