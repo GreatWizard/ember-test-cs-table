@@ -15,7 +15,15 @@
       /></td>
     {{#if @structure}}
       {{#each @structure as |s|}}
-        <td data-test-cs-table-row-col={{s.key}}>{{get @row s.key}}</td>
+        <td data-test-cs-table-row-col={{s.key}}>
+          {{#if s.component}}
+            {{#let (component s.component) as |CustomCell|}}
+              <CustomCell @value={{get @row s.key}} />
+            {{/let}}
+          {{else}}
+            {{get @row s.key}}
+          {{/if}}
+        </td>
       {{/each}}
     {{else}}
       {{#with (keys @row) as |keys|}}

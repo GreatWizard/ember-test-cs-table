@@ -7,7 +7,7 @@ export default class ApplicationController extends Controller {
       { key: 'name', label: 'Name' },
       { key: 'device', label: 'Device' },
       { key: 'path', label: 'Path' },
-      { key: 'status', label: 'Status' },
+      { key: 'status', label: 'Status', component: 'custom-status' },
     ],
     rows: [
       {
