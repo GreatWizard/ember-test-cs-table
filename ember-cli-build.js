@@ -1,10 +1,15 @@
 'use strict'
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon')
+const {
+  optionsEmberCliStringHelpers,
+  optionsEmberComposableHelpers,
+} = require('./options-addons')
 
 module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {
-    // Add options here
+    ...optionsEmberCliStringHelpers,
+    ...optionsEmberComposableHelpers,
   })
 
   /*
