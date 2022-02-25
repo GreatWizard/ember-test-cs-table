@@ -1,0 +1,22 @@
+<table data-test-cs-table>
+  <thead data-test-cs-table-header>
+    <tr>
+      <th>Name</th>
+      <th>Device</th>
+      <th>Path</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody data-test-cs-table-body={{@rows.length}}>
+    {{#each @rows as |row|}}
+      <tr data-test-cs-table-row='{{row.name}}-{{row.device}}'>
+        <td>{{row.name}}</td>
+        <td>{{row.device}}</td>
+        <td>{{row.path}}</td>
+        <td>{{row.status}}</td>
+      </tr>
+    {{else}}
+      <p data-test-cs-table-empty>No data to display.</p>
+    {{/each}}
+  </tbody>
+</table>
