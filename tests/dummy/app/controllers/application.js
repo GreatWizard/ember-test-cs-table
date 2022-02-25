@@ -1,4 +1,5 @@
 import Controller from '@ember/controller'
+import { action } from '@ember/object'
 
 export default class ApplicationController extends Controller {
   model = {
@@ -43,5 +44,11 @@ export default class ApplicationController extends Controller {
     selectableFunction(items) {
       return items.filter((item) => item.status === 'available')
     },
+  }
+
+  @action
+  downloadSelected(items) {
+    let text = items.map((item) => `[${item.device}] ${item.path}`).join('\n\n')
+    alert(text)
   }
 }

@@ -6,6 +6,14 @@
   @rows={{this.model.rows}}
   @structure={{this.model.structure}}
   @selectableFunction={{this.model.selectableFunction}}
-/>
+  as |selectedItems|
+>
+  <button
+    type='button'
+    disabled={{eq selectedItems.length 0}}
+    {{on 'click' (fn this.downloadSelected selectedItems)}}
+    data-test-download-button
+  >Download Selected</button>
+</CsTable>
 
 {{outlet}}
