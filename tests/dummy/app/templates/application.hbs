@@ -3,6 +3,7 @@
 <h2 id='title'>Welcome to the Developer Test</h2>
 
 <CsTable
+  class='container'
   @rows={{this.model.rows}}
   @structure={{this.model.structure}}
   @selectableFunction={{this.model.selectableFunction}}
@@ -10,6 +11,7 @@
 >
   <button
     type='button'
+    class='button button--primary'
     disabled={{eq selectedItems.length 0}}
     {{on 'click' (fn this.downloadSelected selectedItems)}}
     data-test-download-button

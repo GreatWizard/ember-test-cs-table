@@ -1,0 +1,22 @@
+@import 'variables';
+
+@import 'badge';
+@import 'button';
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+input[type='checkbox'] {
+  cursor: pointer;
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}

@@ -4,12 +4,14 @@ const EmberAddon = require('ember-cli/lib/broccoli/ember-addon')
 const {
   optionsEmberCliStringHelpers,
   optionsEmberComposableHelpers,
+  optionsEmberMathHelpers,
 } = require('./options-addons')
 
 module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {
     ...optionsEmberCliStringHelpers,
     ...optionsEmberComposableHelpers,
+    ...optionsEmberMathHelpers,
   })
 
   /*

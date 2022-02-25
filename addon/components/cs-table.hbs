@@ -1,43 +1,57 @@
-<div data-test-select-all>
-  <Input
-    @type='checkbox'
-    @checked={{eq this.selectedItems.length this.selectableItems.length}}
-    indeterminate={{and
-      (lt this.selectedItems.length this.selectableItems.length)
-      (gt this.selectedItems.length 0)
-    }}
-    disabled={{eq this.selectableItems.length 0}}
-    label='Select all'
-    aria-label='Select all'
-    {{on 'input' this.selectAll}}
-    data-test-select-all-checkbox
-  />
-  {{if
-    this.selectedItems
-    (concat 'Selected ' this.selectedItems.length)
-    'None selected'
-  }}
-</div>
-
-{{yield this.selectedItems}}
-
-<table data-test-cs-table>
-  {{#if @structure}}
-    <thead data-test-cs-table-header>
-      <CsTable::Header @structure={{@structure}} />
-    </thead>
-  {{/if}}
-  <tbody data-test-cs-table-body={{@rows.length}}>
-    {{#each @rows as |row|}}
-      <CsTable::Row
-        @row={{row}}
-        @structure={{@structure}}
-        @selected={{includes row this.selectedItems}}
-        @disabled={{not (includes row this.selectableItems)}}
-        @onSelect={{this.rowSelectedChange}}
+<div class='cs-container' ...attributes>
+  <div class='cs-header'>
+    <span class='cs-item' data-test-select-all>
+      <Input
+        @type='checkbox'
+        @checked={{eq this.selectedItems.length this.selectableItems.length}}
+        indeterminate={{and
+          (lt this.selectedItems.length this.selectableItems.length)
+          (gt this.selectedItems.length 0)
+        }}
+        disabled={{eq this.selectableItems.length 0}}
+        label='Select all'
+        aria-label='Select all'
+        {{on 'input' this.selectAll}}
+        data-test-select-all-checkbox
       />
-    {{else}}
-      <p data-test-cs-table-empty>No data to display.</p>
-    {{/each}}
-  </tbody>
-</table>
+      {{if
+        this.selectedItems
+        (concat 'Selected ' this.selectedItems.length)
+        'None selected'
+      }}
+    </span>
+
+    <span class='cs-item'>
+      {{yield this.selectedItems}}
+    </span></div>
+
+  <table class='cs-table' data-test-cs-table>
+    {{#if @structure}}
+      <thead data-test-cs-table-header>
+        <CsTable::Header class='cs-table__cs-title' @structure={{@structure}} />
+      </thead>
+    {{/if}}
+    <tbody data-test-cs-table-body={{@rows.length}}>
+      {{#each @rows as |row|}}
+        <CsTable::Row
+          class={{concat
+            'cs-table__cs-row cs-row'
+            (if (includes row this.selectedItems) ' cs-row--selected')
+          }}
+          @row={{row}}
+          @structure={{@structure}}
+          @selected={{includes row this.selectedItems}}
+          @disabled={{not (includes row this.selectableItems)}}
+          @onSelect={{this.rowSelectedChange}}
+        />
+      {{else}}
+        <tr data-test-cs-table-empty>
+          <td
+            class='cs-util-centered'
+            colspan={{add (or @structure.length 0) 1}}
+          >No data to display.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

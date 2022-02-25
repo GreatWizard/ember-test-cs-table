@@ -1,0 +1,11 @@
+.cs-item {
+  padding: 8px 12px;
+
+  &--no-left {
+    padding-left: 0;
+  }
+
+  &--no-right {
+    padding-right: 0;
+  }
+}

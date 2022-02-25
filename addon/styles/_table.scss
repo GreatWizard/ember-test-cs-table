@@ -1,0 +1,30 @@
+.cs-table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+
+  &__cs-title {
+    font-size: large;
+    border-bottom: 1px solid $color-separator;
+  }
+
+  &__cs-row {
+    border-bottom: 1px solid $color-separator;
+
+    &:last-of-type {
+      border-bottom: 0;
+    }
+
+    &:hover {
+      td {
+        background-color: $color-hover;
+      }
+    }
+  }
+}
+
+.cs-row {
+  &--selected {
+    background-color: $color-selected;
+  }
+}

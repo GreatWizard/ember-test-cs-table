@@ -310,4 +310,37 @@ module('Integration | Component | cs-table', function (hooks) {
       assert.ok(error, 'Error is thrown')
     }
   })
+
+  test('it adds cs-row--selected class on selected rows', async function (assert) {
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} />`
+    )
+    assert
+      .dom('[data-test-cs-table-row].cs-row.cs-row--selected')
+      .doesNotExist('No row has cs-row--selected class')
+    await click('[data-test-select-all-checkbox]')
+    assert
+      .dom('[data-test-cs-table-row].cs-row.cs-row--selected')
+      .exists({ count: 2 }, 'All rows has cs-row--selected class')
+  })
 })

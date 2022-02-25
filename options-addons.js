@@ -10,7 +10,14 @@ const optionsEmberComposableHelpers = {
   },
 }
 
+const optionsEmberMathHelpers = {
+  'ember-math-helpers': {
+    only: ['add'],
+  },
+}
+
 module.exports = {
   optionsEmberCliStringHelpers,
   optionsEmberComposableHelpers,
+  optionsEmberMathHelpers,
 }

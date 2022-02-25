@@ -1,0 +1,10 @@
+.badge {
+  display: inline-block;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+
+  &--green {
+    background-color: $color-success;
+  }
+}

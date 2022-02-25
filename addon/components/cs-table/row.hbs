@@ -1,6 +1,6 @@
 {{#if @row}}
-  <tr data-test-cs-table-row>
-    <td><Input
+  <tr data-test-cs-table-row ...attributes>
+    <td class='cs-item cs-item--no-right'><Input
         @type='checkbox'
         @checked={{@selected}}
         disabled={{@disabled}}
@@ -14,8 +14,11 @@
         }}
       /></td>
     {{#if @structure}}
-      {{#each @structure as |s|}}
-        <td data-test-cs-table-row-col={{s.key}}>
+      {{#each @structure as |s index|}}
+        <td
+          class={{concat 'cs-item' (if (eq index 0) ' cs-item--no-left')}}
+          data-test-cs-table-row-col={{s.key}}
+        >
           {{#if s.component}}
             {{#let (component s.component) as |CustomCell|}}
               <CustomCell @value={{get @row s.key}} />
@@ -27,8 +30,11 @@
       {{/each}}
     {{else}}
       {{#with (keys @row) as |keys|}}
-        {{#each keys as |key|}}
-          <td data-test-cs-table-row-col={{key}}>{{get @row key}}</td>
+        {{#each keys as |key index|}}
+          <td
+            class={{concat 'cs-item' (if (eq index 0) ' cs-item--no-left')}}
+            data-test-cs-table-row-col={{key}}
+          >{{get @row key}}</td>
         {{/each}}
       {{/with}}
     {{/if}}

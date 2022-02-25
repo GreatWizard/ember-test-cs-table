@@ -1,8 +1,11 @@
 {{#if @structure}}
-  <tr>
-    <th></th>
-    {{#each @structure as |s|}}
-      <th data-test-cs-table-header-col={{s.key}}>{{s.label}}</th>
+  <tr ...attributes>
+    <th class='cs-item'></th>
+    {{#each @structure as |s index|}}
+      <th
+        class={{concat 'cs-item' (if (eq index 0) ' cs-item--no-left')}}
+        data-test-cs-table-header-col={{s.key}}
+      >{{s.label}}</th>
     {{/each}}
   </tr>
 {{/if}}
