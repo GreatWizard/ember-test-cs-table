@@ -1,0 +1,15 @@
+<CsTable
+  class='container'
+  @rows={{@rows}}
+  @structure={{this.structure}}
+  @selectableFunction={{this.selectableFunction}}
+  as |selectedItems|
+>
+  <button
+    type='button'
+    class='button button--primary'
+    disabled={{eq selectedItems.length 0}}
+    {{on 'click' (fn this.downloadSelected selectedItems)}}
+    data-test-download-button
+  >Download Selected</button>
+</CsTable>
