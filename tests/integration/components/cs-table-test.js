@@ -258,7 +258,7 @@ module('Integration | Component | cs-table', function (hooks) {
   })
 
   test("it disallows to select rows that doesn't validate the selectableFunction passed as argument", async function (assert) {
-    assert.expect(4)
+    assert.expect(6)
     this.set('structure', [
       { key: 'name', label: 'Name' },
       { key: 'device', label: 'Device' },
@@ -295,14 +295,20 @@ module('Integration | Component | cs-table', function (hooks) {
     assert
       .dom('[data-test-cs-table-row-select="selectable"]')
       .exists({ count: 1 }, 'One row is selectable')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isEnabled('Select all checkbox is enabled')
 
-    this.set('selectableFunction', () => false)
+    this.set('selectableFunction', () => [])
     await render(
       hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} @selectableFunction={{this.selectableFunction}} />`
     )
     assert
       .dom('[data-test-cs-table-row-select="selectable"]')
       .doesNotExist('No row is selectable')
+    assert
+      .dom('[data-test-select-all-checkbox]')
+      .isDisabled('Select all checkbox is disabled')
 
     try {
       this.set('selectableFunction', true)

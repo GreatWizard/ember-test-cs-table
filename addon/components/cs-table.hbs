@@ -3,7 +3,10 @@
     <span class='cs-item' data-test-select-all>
       <Input
         @type='checkbox'
-        @checked={{eq this.selectedItems.length this.selectableItems.length}}
+        @checked={{and
+          (eq this.selectedItems.length this.selectableItems.length)
+          (gt this.selectableItems.length 0)
+        }}
         indeterminate={{and
           (lt this.selectedItems.length this.selectableItems.length)
           (gt this.selectedItems.length 0)
