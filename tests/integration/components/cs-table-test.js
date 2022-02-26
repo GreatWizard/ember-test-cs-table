@@ -2,6 +2,9 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'ember-qunit'
 import { click, render } from '@ember/test-helpers'
 import { hbs } from 'ember-cli-htmlbars'
+import { getOwner } from '@ember/application'
+import Component from '@glimmer/component'
+import { setComponentTemplate } from '@ember/component'
 
 module('Integration | Component | cs-table', function (hooks) {
   setupRenderingTest(hooks)
@@ -342,5 +345,83 @@ module('Integration | Component | cs-table', function (hooks) {
     assert
       .dom('[data-test-cs-table-row].cs-row.cs-row--selected')
       .exists({ count: 2 }, 'All rows has cs-row--selected class')
+  })
+
+  test('it uses custom component for a cell', async function (assert) {
+    // Setup: Create a custom component with template and register it
+    let customComponent = class CustomComponent extends Component {}
+    setComponentTemplate(
+      hbs('<span data-test-custom-component>{{@value}}</span>', {
+        moduleName: 'custom-component.hbs',
+      }),
+      customComponent
+    )
+    getOwner(this).register('component:custom-component', customComponent)
+
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status', component: 'custom-component' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} />`
+    )
+    assert
+      .dom('[data-test-custom-component]')
+      .exists({ count: 2 }, 'Custom component for a cell is rendered')
+
+    // Teardown: unregister the custom component
+    getOwner(this).unregister('component:custom-component')
+  })
+
+  test('it renders block template in the header part and have access to selectedItems', async function (assert) {
+    this.set('structure', [
+      { key: 'name', label: 'Name' },
+      { key: 'device', label: 'Device' },
+      { key: 'path', label: 'Path' },
+      { key: 'status', label: 'Status' },
+    ])
+    this.set('rows', [
+      {
+        name: 'smss.exe',
+        device: 'Stark',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\smss.exe',
+        status: 'scheduled',
+      },
+      {
+        name: 'netsh.exe',
+        device: 'Targaryen',
+        path: '\\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe',
+        status: 'available',
+      },
+    ])
+    await render(
+      hbs`<CsTable @rows={{this.rows}} @structure={{this.structure}} as |selectedItems|><span data-test-selected-items>{{selectedItems.length}}</span></CsTable>`
+    )
+    assert
+      .dom('[data-test-yield-block] [data-test-selected-items]')
+      .exists('Block template is rendered in the header part')
+    assert
+      .dom('[data-test-selected-items]')
+      .hasText('0', 'Block template has access to selectedItems')
+    await click('[data-test-select-all-checkbox]')
+    assert
+      .dom('[data-test-selected-items]')
+      .hasText('2', 'Block template has access to selectedItems')
   })
 })
