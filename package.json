@@ -5,9 +5,15 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GreatWizard/ember-test-cs-table.git"
+  },
   "license": "MIT",
-  "author": "",
+  "author": {
+    "name": "Guillaume Gérard",
+    "url": "https://guillaume.sh"
+  },
   "directories": {
     "doc": "doc",
     "test": "tests"
